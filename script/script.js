@@ -30,19 +30,23 @@ function changeCanvas() {
 }
 
 camera.position.z = 2;
-
+var v = 0.1;
 const animate = function () {
 	requestAnimationFrame( animate );
 
     changeCanvas();
 	texture.needsUpdate = true;
-	mesh.rotation.x+=0.01;
-	mesh.rotation.y+=0.01;
+
+	
+	if (keyState[40]) mesh.rotation.x += v;
+	if (keyState[38]) mesh.rotation.x -= v;
+	if (keyState[37]) mesh.rotation.y -= v;
+	if (keyState[39]) mesh.rotation.y += v;
 	
 	renderer.render( scene, camera );
 };
 
-animate();
+
 
 // resize canvas
 window.addEventListener('resize', () => {
@@ -50,4 +54,20 @@ window.addEventListener('resize', () => {
 	camera.aspect = window.innerWidth / window.innerHeight;
   
 	camera.updateProjectionMatrix();
-  })
+})
+
+  var keyState = [];
+  document.addEventListener(
+	  'keydown',
+	  (event)=>{
+		  keyState[event.keyCode || event.which] = true;
+	  }
+  );
+  document.addEventListener(
+	  'keyup',
+	  (event)=>{
+		  keyState[event.keyCode || event.which] = false;
+	  }
+  );
+
+  animate();
